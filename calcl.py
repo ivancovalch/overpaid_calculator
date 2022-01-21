@@ -30,16 +30,15 @@ class LoanPay:
       
     def __init__(self, loan, periods, is_month, interest, inflate, comiss, insurance, decimal=2):
         self.loan = loan
-        #self.periods = periods
         self.__is_month = is_month
         self.interest = interest
         self.inflate = inflate
         self.comiss = comiss
         self.insurance = insurance
         self.decimal = decimal
-        self.__periods = self.periods(self, periods)
+        self.periods = periods
 
-        self.calculate(self)
+        self.calculate()
 
     def calculate(self):
             years = self.__periods / 12  # срок кредита в годах
@@ -105,10 +104,13 @@ class LoanPay:
             self.__periods = value
 
     @property
-    def month(self):
+    def is_month(self):
         return self.__is_month
 
-    @month.setter
-    def month(self, value):
+    @is_month.setter
+    def is_month(self, value):
         self.__is_month = value
-        self.periods(self, self.__periods)
+        if not self.__is_month:
+            self.__periods = (int)(self.__periods * 12)
+        else:
+            self.__periods = (int)(self.__periods / 12)
