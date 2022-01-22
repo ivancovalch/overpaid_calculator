@@ -155,10 +155,10 @@
                         #pos_hint: {"center_y": 0.5,"left": 0}
                         #on_text: root.calculate()
                         #on_text_validate: root.validate_loan(self)
-                        on_focus: root.validate_loan(self)
+                        on_focus: root.validate('loan')
 
                     TFbase:
-                        id: ti_periods
+                        id: periods
                         icon_right: "clipboard-text-clock-outline"
                         hint_text: "ПЕРИОДЫ"
                         text: ""
@@ -172,7 +172,7 @@
                         #pos_hint: {"center_y": 0.5,"center_x": 0.5}
                         #width: self.minimum_width
                         #on_text: 
-                        on_focus: root.validate_periods(self)
+                        on_focus: root.validate('periods')
 
                     MDGridLayout:
                         cols:2
@@ -224,7 +224,7 @@
                     size_hint_x: 1
 
                     TFbase:
-                        id: ti_interest
+                        id: interest
                         icon_right: "percent"
                         hint_text: "ПРОЦЕНТНАЯ СТАВКА"
                         text: ""
@@ -234,10 +234,10 @@
                         helper_text_mode: "on_error"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate_percent(self)
+                        on_focus: root.validate('interest')
                         #on_text_validate: root.ftext_validate(self, 'ti_interest')
                     TFbase:
-                        id: ti_inflate
+                        id: inflate
                         icon_right: "percent-outline"
                         hint_text: "ОЖИДАЕМАЯ ИНФЛЯЦИЯ"
                         text: ""
@@ -250,7 +250,7 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate_inflate(self)
+                        on_focus: root.validate('inflate')
 
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -262,7 +262,7 @@
                     size_hint_x: 1
 
                     TFbase:
-                        id: ti_comiss
+                        id: comiss
                         icon_right: "cash"
                         hint_text: "КОМИССИИ"
                         text: ""
@@ -275,10 +275,10 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate_comiss(self)
+                        on_focus: root.validate('comiss')
 
                     TFbase:
-                        id: ti_insurance
+                        id: insurance
                         icon_right: "briefcase"
                         hint_text: "РАСХОДЫ НА СТРАХОВКУ"
                         text: ""
@@ -291,7 +291,7 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate_insurance(self)
+                        on_focus: root.validate('insurance')
 # RESULTS -----------------------------------------------------------------------
             MDBoxLayout: # MDCard:
                 id: c_results

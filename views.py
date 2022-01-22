@@ -11,114 +11,38 @@ class Container(Screen):
         super().__init__(**kwargs)
 
         self.ids.loan.text = "1000000"
-        self.ids.ti_periods.text = "12"
-        self.ids.ti_interest.text = "10"
-        self.ids.ti_inflate.text = "8"
-        self.ids.ti_comiss.text = "0"
-        self.ids.ti_insurance.text = "0"
+        self.ids.periods.text = "12"
+        self.ids.interest.text = "10"
+        self.ids.inflate.text = "8"
+        self.ids.comiss.text = "0"
+        self.ids.insurance.text = "0"
 
 
-    def validate_loan(self, instance):
-        if instance.focus == True:
+    def validate(self, name):
+        instance = self.ids[name]
+        if instance.focus is True:
             return
-
-        val = (int)(instance.text)
-        if val <= 0:
+        
+        if 'int' in instance.input_filter:
+            val = (int)(instance.text)
+        else:
+            val = (float)(instance.text)
+        if name in ('comiss', 'insurance') and val < 0:
+            instance.error = True
+            return
+        elif val <= 0:
             instance.error = True
             return
         else:
             instance.error = False
-        self.lp.loan = val
+
+        setattr(self.lp, name, val)
 
         try:
             self.lp.calculate()
         except:
             instance.error = True
 
-    def validate_periods(self, instance):
-        if instance.focus == True:
-            return
-
-        val = (int)(instance.text)
-        if val <= 0:
-            instance.error = True
-            return
-        else:
-            instance.error = False
-        self.lp.periods = val
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
-
-    def validate_percent(self, instance):
-        if instance.focus == True:
-            return
-
-        val = (float)(instance.text)
-        if val <= 0:
-            instance.error = True
-            return
-        else:
-            instance.error = False
-        self.lp.interest = val
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
-
-    def validate_inflate(self, instance):
-        if instance.focus == True:
-            return
-
-        val = (float)(instance.text)
-        if val <= 0:
-            instance.error = True
-            return
-        else:
-            instance.error = False
-        self.lp.inflate = val
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
-
-    def validate_comiss(self, instance):
-        if instance.focus == True:
-            return
-
-        val = (float)(instance.text)
-        if val < 0:
-            instance.error = True
-            return
-        else:
-            instance.error = False
-        self.lp.comiss = val
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
-
-    def validate_insurance(self, instance):
-        if instance.focus == True:
-            return
-
-        val = (float)(instance.text)
-        if val < 0:
-            instance.error = True
-            return
-        else:
-            instance.error = False
-        self.lp.insurance = val
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
 
     def validate_checkbox(self):
         if self.ids.cb_month.active:
