@@ -7,14 +7,16 @@
     text_size: self.size
     font_size: "18dp"
     valign: "right"
-    helper_text_mode: "on_focus"
+    #helper_text_mode: "on_focus"
     theme_text_color: "Primary"
     icon_right_color: app.theme_cls.primary_color
     #text_color: 1,1,1,1
     #pos_hint: {"center_y": .5}
     mode: "fill"
     height: self.minimum_height
+    input_type: 'number'
     #fill_color: 0.2, 0.2, 0.2, .4
+    #on_focus: app.root.on_focus_callback(self)
 
 
 <MDLRes@MDLabel>
@@ -143,7 +145,7 @@
                         font_style: "Body2"
                         hint_text: "СУММА"
                         hint_text_color: [0.8, 0.8, 0.8, 1.0]
-                        text: "1000000"
+                        text: ""
                         input_filter: 'int'
                         max_text_length: 12
                         helper_text: "Введите число > 0"
@@ -152,13 +154,14 @@
                         size_hint_x: .5
                         #pos_hint: {"center_y": 0.5,"left": 0}
                         #on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'credit_input')
+                        #on_text_validate: root.validate_loan(self)
+                        on_focus: root.validate_loan(self)
 
                     TFbase:
                         id: ti_periods
                         icon_right: "clipboard-text-clock-outline"
                         hint_text: "ПЕРИОДЫ"
-                        text: "12"
+                        text: ""
                         input_filter: 'int'
                         max_text_length: 3
                         helper_text: "Введите целое число > 0"
@@ -168,8 +171,8 @@
                         #padding: ["2dp","2dp","2dp","2dp"]
                         #pos_hint: {"center_y": 0.5,"center_x": 0.5}
                         #width: self.minimum_width
-                        #on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'ti_periods')
+                        #on_text: 
+                        on_focus: root.validate_periods(self)
 
                     MDGridLayout:
                         cols:2
@@ -185,7 +188,7 @@
                             group: "period_choose"
                             active: "true"
                             pos_hint: {"right": 1,"top": 1}
-                            #on_active: root.cb_periods(self, self.active, True)
+                            on_active: root.validate_checkbox()
                         MDLabel:
                             text: "Месяцы"
                             theme_text_color: "Secondary"
@@ -195,7 +198,7 @@
                         CheckBox:
                             id: cb_year
                             group: "period_choose"
-                            #on_active: root.cb_periods(self, self.active, False)
+                            on_active: root.validate_checkbox()
                         MDLabel:
                             text: "Годы"
                             theme_text_color: "Secondary"
@@ -224,20 +227,20 @@
                         id: ti_interest
                         icon_right: "percent"
                         hint_text: "ПРОЦЕНТНАЯ СТАВКА"
-                        text: "10"
+                        text: ""
                         max_text_length: 4
                         input_filter: 'float'
                         helper_text: "число, % в год"
                         helper_text_mode: "on_error"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'ti_interest')
+                        on_focus: root.validate_percent(self)
                         #on_text_validate: root.ftext_validate(self, 'ti_interest')
                     TFbase:
                         id: ti_inflate
                         icon_right: "percent-outline"
                         hint_text: "ОЖИДАЕМАЯ ИНФЛЯЦИЯ"
-                        text: "8"
+                        text: ""
                         max_text_length: 4
                         input_filter: 'float'
                         icon_left: 'money'
@@ -247,7 +250,7 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'ti_inflate')
+                        on_focus: root.validate_inflate(self)
 
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -262,7 +265,7 @@
                         id: ti_comiss
                         icon_right: "cash"
                         hint_text: "КОМИССИИ"
-                        text: "0"
+                        text: ""
                         max_text_length: 5
                         input_filter: 'float'
                         icon_left: 'money'
@@ -272,13 +275,13 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'ti_comiss')
+                        on_focus: root.validate_comiss(self)
 
                     TFbase:
                         id: ti_insurance
                         icon_right: "briefcase"
                         hint_text: "РАСХОДЫ НА СТРАХОВКУ"
-                        text: "0"
+                        text: ""
                         max_text_length: 7
                         input_filter: 'float'
                         icon_left: 'money'
@@ -287,9 +290,8 @@
                         helper_text_mode: "on_focus"
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
-                        on_text: root.calculate()
-                        #on_focus: root.f_on_focus(self, 'ti_insurance')
-
+                        #on_text: root.calculate()
+                        on_focus: root.validate_insurance(self)
 # RESULTS -----------------------------------------------------------------------
             MDBoxLayout: # MDCard:
                 id: c_results
@@ -307,7 +309,6 @@
                 MDBoxLayout:
                     orientation:  "horizontal"
                     spacing: "5dp"
-                    size_hint_y: .1
                     MDLabel:
                         id: lb_results
                         text: "Результат"
@@ -318,235 +319,218 @@
                         size_hint_y: 1
                         size_hint_x: 1
 
+                MDLabel:
+                    id: lb_nominal_term
+                    markup: True
+                    text: "[color=#FFFAFA]Номинальная переплата[/color] = проценты + комиссии и прочие платежи банку сверх суммы основного долга"
+                    font_style: "Body2"
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_fact_term
+                    markup: True
+                    text: "[color=#FFFAFA]Фактическая переплата[/color] = номинальная переплата - уменьшение стоимости (покупательной способности) денег из-за инфляции"
+                    font_style: "Body2"
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_effective_term
+                    markup: True
+                    text: "[color=#FFFAFA]Эффективная ставка[/color] = процентная ставка с учетом допплатежей (комиссии и т.п.)"
+                    font_style: "Body2"
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_quality_term
+                    markup: True
+                    text: "[color=#FFFAFA]Дороговизна|качество кредита[/color] = эффективная ставка - инфляция"
+                    font_style: "Body2"
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+
+
+                MDGridLayout:
+                    cols: 4
+                    rows: 1
+                    padding: [0,"10dp","10dp","10dp"]
+                    spacing: "0dp"
+                    size_hint_y: 1
+                    height: "40dp" # self.minimum_height
+                    pos_hint: {"top": 1, "center_x": .5}
+
+                    MDLabel:
+                        id: lb_quality
+                        text: ""
+                        font_style: "Body1"
+                        theme_text_color: "Custom"
+                        pos_hint: {"bottom": 0, "center_x": .5}
+                        spacing: "5dp"
+                        size_hint_x: 0.4
+                    MDLabel:
+                        id: lb_rank
+                        text: root.lp.rank
+                        font_style: "H6"
+                        theme_text_color: "Custom"
+                        size_hint_x: 0.2
+                        pos_hint: {"bottom": 0, "center_x": .5}
+                        spacing: "5dp"
+                        halign: "right"
+                        valign: "bottom"
+                    MDLabel:
+                        id: lb_rank_text
+                        text: "/10"
+                        font_style: "Body2"
+                        theme_text_color: "Secondary"
+                        spacing: "5dp"
+                        size_hint_x: 0.1
+                        #text_size: self.size
+                        pos_hint: {"bottom": 0, "center_x": .5}
+                        halign: "left"
+                        valign: "bottom"
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        size_hint_x: 0.4
+                        pos_hint: {"bottom": 0, "center_x": .5}
+                        MDIstar:
+                            id: ic_rank_0
+                        MDIstar:
+                            id: ic_rank_1
+                        MDIstar:
+                            id: ic_rank_2
+                        MDIstar:
+                            id: ic_rank_3
+                        MDIstar:
+                            id: ic_rank_4
+                        MDIstar:
+                            id: ic_rank_5
+                        MDIstar:
+                            id: ic_rank_6
+                        MDIstar:
+                            id: ic_rank_7
+                        MDIstar:
+                            id: ic_rank_8
+                        MDIstar:
+                            id: ic_rank_9
+
                 MDBoxLayout:
-                    size_hint_y: .9
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    width: 1
+                    padding: [0,"10dp",0,"10dp"]
 
-                    ScrollView:
-                        do_scroll_x: False
-                        do_scroll_y: True
-                        size: self.size
-                        scroll_y: 0
-                        
-                        MDBoxLayout:
-                            size_hint_y: None
-                            orientation: 'vertical'
-                            MDLabel:
-                                id: lb_nominal_term
-                                markup: True
-                                text: "[color=#FFFAFA]Номинальная переплата[/color] = проценты + комиссии и прочие платежи банку сверх суммы основного долга"
-                                font_style: "Body2"
-                                theme_text_color: "Hint"
-                                size_hint: 1, None
-                                height: self.texture_size[1]
-                                pos_hint: {'y': 1}
-                            MDLabel:
-                                id: lb_fact_term
-                                markup: True
-                                text: "[color=#FFFAFA]Фактическая переплата[/color] = номинальная переплата - уменьшение стоимости (покупательной способности) денег из-за инфляции"
-                                font_style: "Body2"
-                                theme_text_color: "Hint"
-                                size_hint: 1, None
-                                height: self.texture_size[1]
-                            MDLabel:
-                                id: lb_effective_term
-                                markup: True
-                                text: "[color=#FFFAFA]Эффективная ставка[/color] = процентная ставка с учетом допплатежей (комиссии и т.п.)"
-                                font_style: "Body2"
-                                theme_text_color: "Hint"
-                                size_hint: 1, None
-                                height: self.texture_size[1]
-                            MDLabel:
-                                id: lb_quality_term
-                                markup: True
-                                text: "[color=#FFFAFA]Дороговизна|качество кредита[/color] = эффективная ставка - инфляция"
-                                font_style: "Body2"
-                                theme_text_color: "Hint"
-                                size_hint: 1, None
-                                height: self.texture_size[1]
+                    MDLabel:
+                        id: lb_quality_hint
+                        text: "Качественная оценка"
+                        font_style: "Body1"
+                        theme_text_color: "Custom"
+                        #padding: ("10dp","10dp","10dp","10dp")
+                        #spacing: "5dp"
+                        size_hint_x: 0.8
+                        halign: "left"
+                        valign: "bottom"
+                    MDLabel:
+                        id: lb_loanoverpaidiscpc
+                        text: root.lp.overpaid_discounted_pc # переплата в процентах
+                        font_style: "Body2"
+                        theme_text_color: "Custom"
+                        #padding: ("10dp","10dp","10dp","10dp")
+                        #spacing: "5dp"
+                        size_hint_x: 0.2
+                        halign: "right"
+                        valign: "bottom"
 
+                MDGridLayout:
+                    id: gr_overpay
+                    cols: 2
+                    rows: 1
+                    padding: [0,0,0,0]
+                    #spacing: "5dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"top": 1, "center_x": .5}
 
+                    MDLabel:
+                        id: lb_money_back
+                        text: ""
+                        font_style: "Body2"
+                        padding_x: 10
+                        size_hint_x: 0.8
+                        size_hint_y: None
+                        height: "5dp"
+                        md_bg_color: utils.get_color_from_hex("#6EE768")
+                    MDLabel:
+                        id: lb_money_over
+                        font_style: "Body2"
+                        padding_x: 10
+                        size_hint_x: 0.2
+                        size_hint_y: None
+                        height: "5dp"
+                        #md_bg_color: color_light_red #[1,.3,0,1] # Red - Overpay
 
-                            MDGridLayout:
-                                cols: 4
-                                rows: 1
-                                padding: [0,"10dp","10dp","10dp"]
-                                spacing: "0dp"
-                                size_hint_y: 1
-                                height: "40dp" # self.minimum_height
-                                pos_hint: {"top": 1, "center_x": .5}
-
-                                MDLabel:
-                                    id: lb_quality
-                                    text: ""
-                                    font_style: "Body1"
-                                    theme_text_color: "Custom"
-                                    pos_hint: {"bottom": 0, "center_x": .5}
-                                    spacing: "5dp"
-                                    size_hint_x: 0.4
-                                MDLabel:
-                                    id: lb_rank
-                                    text: ""
-                                    font_style: "H6"
-                                    theme_text_color: "Custom"
-                                    size_hint_x: 0.2
-                                    pos_hint: {"bottom": 0, "center_x": .5}
-                                    spacing: "5dp"
-                                    halign: "right"
-                                    valign: "bottom"
-                                MDLabel:
-                                    id: lb_rank_text
-                                    text: "/10"
-                                    font_style: "Body2"
-                                    theme_text_color: "Secondary"
-                                    spacing: "5dp"
-                                    size_hint_x: 0.1
-                                    #text_size: self.size
-                                    pos_hint: {"bottom": 0, "center_x": .5}
-                                    halign: "left"
-                                    valign: "bottom"
-                                MDBoxLayout:
-                                    orientation: "horizontal"
-                                    size_hint_x: 0.4
-                                    pos_hint: {"bottom": 0, "center_x": .5}
-                                    MDIstar:
-                                        id: ic_rank_0
-                                    MDIstar:
-                                        id: ic_rank_1
-                                    MDIstar:
-                                        id: ic_rank_2
-                                    MDIstar:
-                                        id: ic_rank_3
-                                    MDIstar:
-                                        id: ic_rank_4
-                                    MDIstar:
-                                        id: ic_rank_5
-                                    MDIstar:
-                                        id: ic_rank_6
-                                    MDIstar:
-                                        id: ic_rank_7
-                                    MDIstar:
-                                        id: ic_rank_8
-                                    MDIstar:
-                                        id: ic_rank_9
-
-                            MDBoxLayout:
-                                orientation: "horizontal"
-                                size_hint_y: None
-                                height: self.minimum_height
-                                width: 1
-                                padding: [0,"10dp",0,"10dp"]
-
-                                MDLabel:
-                                    id: lb_quality_hint
-                                    text: "Качественная оценка"
-                                    font_style: "Body1"
-                                    theme_text_color: "Custom"
-                                    #padding: ("10dp","10dp","10dp","10dp")
-                                    #spacing: "5dp"
-                                    size_hint_x: 0.8
-                                    halign: "left"
-                                    valign: "bottom"
-                                MDLabel:
-                                    id: lb_loanoverpaidiscpc
-                                    text: "" # переплата в процентах
-                                    font_style: "Body2"
-                                    theme_text_color: "Custom"
-                                    #padding: ("10dp","10dp","10dp","10dp")
-                                    #spacing: "5dp"
-                                    size_hint_x: 0.2
-                                    halign: "right"
-                                    valign: "bottom"
-
-                            MDGridLayout:
-                                id: gr_overpay
-                                cols: 2
-                                rows: 1
-                                padding: [0,0,0,0]
-                                #spacing: "5dp"
-                                size_hint_y: None
-                                height: self.minimum_height
-                                pos_hint: {"top": 1, "center_x": .5}
-
-                                MDLabel:
-                                    id: lb_money_back
-                                    text: ""
-                                    font_style: "Body2"
-                                    padding_x: 10
-                                    size_hint_x: 0.8
-                                    size_hint_y: None
-                                    height: "5dp"
-                                    md_bg_color: utils.get_color_from_hex("#6EE768")
-                                MDLabel:
-                                    id: lb_money_over
-                                    font_style: "Body2"
-                                    padding_x: 10
-                                    size_hint_x: 0.2
-                                    size_hint_y: None
-                                    height: "5dp"
-                                    #md_bg_color: color_light_red #[1,.3,0,1] # Red - Overpay
-
-                            MDGridLayout:
-                                cols: 2
-                                rows: 6
-                                padding: [0,0,0,0]
-                                #spacing: "5dp"
-                                size_hint_y: None
-                                height: self.minimum_height
-                                #adaptive_height: True
-                                #row_default_height: 500
-                                #md_bg_color: 0.708, 0.281, 0.097, 1
-                                #orientation: "horizontal"
-                                MDLRes:
-                                    id: lb_loanoverpaidisc_text
-                                    text: "фактическая переплата"
-                                    #size_hint_x: 0.7
-                                    #padding: [10,0,0,0]
-                                MDLRes:
-                                    id: lb_loanoverpaidisc
-                                    text: "" # дисконтированная переплата в валютных единицах (рубли и т.п.)
-                                    halign: "right"
-                                    #size_hint_x: 0.3
-                                MDLRes:
-                                    id: lb_loanoverpaid_text
-                                    text: "номинальная переплата"
-                                    halign: "left"
-                                    #size_hint_x: 0.7
-                                MDLRes:
-                                    id: lb_loanoverpaid # числовое значение суммы долга
-                                    text: ""
-                                    halign: "right"
-                                    #size_hint_x: 0.3
-                                MDLRes:
-                                    id: blank1r
-                                MDLRes:
-                                    id: blank1l # числовое значение суммы долга
-                                MDLRes:
-                                    id: lb_annuity_text
-                                    text: "аннуитетный платеж"
-                                    halign: "left"
-                                    #size_hint_x: 0.7
-                                MDLRes:
-                                    id: lb_annuity # числовое значение суммы долга
-                                    text: ""
-                                    halign: "right"
-                                    #size_hint_x: 0.3
-                                MDLRes:
-                                    id: lb_efinterest_text
-                                    text: "эффективная ставка"
-                                    halign: "left"
-                                    #size_hint_x: 0.7
-                                MDLRes:
-                                    id: lb_efinterest # числовое значение суммы долга
-                                    text: ""
-                                    halign: "right"
-                                    #size_hint_x: 0.3
-                                MDLRes:
-                                    id: lb_efinterest_infl_text
-                                    text: "выше инфляции на"
-                                    #size_hint_x: 0.7
-                                    halign: 'right'
-                                MDLRes:
-                                    id: lb_efinterest_infl # числовое значение суммы долга
-                                    text: ""
-                                    halign: "right"
-                                    #size_hint_x: 0.3
+                MDGridLayout:
+                    cols: 2
+                    rows: 6
+                    padding: [0,0,0,0]
+                    #spacing: "5dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    #adaptive_height: True
+                    #row_default_height: 500
+                    #md_bg_color: 0.708, 0.281, 0.097, 1
+                    #orientation: "horizontal"
+                    MDLRes:
+                        id: lb_loanoverpaidisc_text
+                        text: "фактическая переплата"
+                        #size_hint_x: 0.7
+                        #padding: [10,0,0,0]
+                    MDLRes:
+                        id: lb_loanoverpaidisc
+                        # дисконтированная переплата в валютных единицах (рубли и т.п.)
+                        text: root.lp.overpaid_discounted
+                        halign: "right"
+                        #size_hint_x: 0.3
+                    MDLRes:
+                        id: lb_loanoverpaid_text
+                        text: "номинальная переплата"
+                        halign: "left"
+                        #size_hint_x: 0.7
+                    MDLRes:
+                        id: lb_loanoverpaid # числовое значение суммы долга
+                        text: root.lp.overpaid
+                        halign: "right"
+                        #size_hint_x: 0.3
+                    MDLRes:
+                        id: blank1r
+                    MDLRes:
+                        id: blank1l # числовое значение суммы долга
+                    MDLRes:
+                        id: lb_annuity_text
+                        text: "аннуитетный платеж"
+                        halign: "left"
+                        #size_hint_x: 0.7
+                    MDLRes:
+                        id: lb_annuity # числовое значение суммы долга
+                        text: root.lp.annuity
+                        halign: "right"
+                        #size_hint_x: 0.3
+                    MDLRes:
+                        id: lb_efinterest_text
+                        text: "эффективная ставка"
+                        halign: "left"
+                        #size_hint_x: 0.7
+                    MDLRes:
+                        id: lb_efinterest # числовое значение суммы долга
+                        text: root.lp.interest_effective
+                        halign: "right"
+                        #size_hint_x: 0.3
+                    MDLRes:
+                        id: lb_efinterest_infl_text
+                        text: "выше инфляции на"
+                        #size_hint_x: 0.7
+                        halign: 'right'
+                    MDLRes:
+                        id: lb_efinterest_infl # числовое значение суммы долга
+                        text: root.lp.interest_over_inflate
+                        halign: "right"
+                        #size_hint_x: 0.3

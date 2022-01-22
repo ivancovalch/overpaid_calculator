@@ -1,5 +1,7 @@
+from kivy.properties import StringProperty
+from kivy.event import EventDispatcher
 
-class LoanPay:
+class LoanPay(EventDispatcher):
 
     '''КЛАСС для расчета параметров переплаты по кредиту
     АРГУМЕНТЫ (получаемые при создании класса)
@@ -27,6 +29,16 @@ class LoanPay:
         self.annuity                - аннуитетный платеж (с учетом ежемсячных комиссий)
         self.interest_effective     - эффективная % ставка по кредиту (с учетом комиссий)
         self.interest_over_inflate  - превышение эффективной ставки над инфляцией'''
+
+    prop = StringProperty()
+    rank = StringProperty()
+    interest_discounted = StringProperty()
+    overpaid_discounted_pc = StringProperty()
+    overpaid = StringProperty()
+    overpaid_discounted = StringProperty()
+    annuity = StringProperty()
+    interest_effective = StringProperty()
+    interest_over_inflate = StringProperty()
       
     def __init__(self, loan, periods, is_month, interest, inflate, comiss, insurance, decimal=2):
         self.loan = loan
@@ -77,19 +89,17 @@ class LoanPay:
             # loan_quality_verb = ""  # вербальная оценка качества кредит
             # loan_quality_hint = ""  # дополнительная вербальная оценка качества кредит
 
-            self.rank = round(rank, 1)  # числовая оценка качества кредита по шкале от 0 до 10
-            self.interest_discounted = round(eff_interest_discount_pc, 1)  # используем для вербально-цветовой оценки
-            self.overpaid_discounted_pc = round(overpaid_discounted_pc, 1)  # реальная переплата %
-            self.overpaid = round(overpaid, self.decimal)  # переплата номинальная
-            self.overpaid_discounted = round(overpaid_discounted, self.decimal)  # переплата реальная (с учетом инфляции)
-            self.annuity = round(payment_month, self.decimal)  # аннуитетный платеж (с учетом ежемсячных комиссий)
-            self.interest_effective = round(interest_effective,
-                                            1)  # эффективная % ставка по кредиту (с учетом комиссий)
-            self.interest_over_inflate = round(eff_interest_discount_pc,
-                                               1)  # превышение эффективной ставки над инфляцией
+            self.rank = str(round(rank, 1))  # числовая оценка качества кредита по шкале от 0 до 10
+            self.interest_discounted = str(round(eff_interest_discount_pc, 1))  # используем для вербально-цветовой оценки
+            self.overpaid_discounted_pc = str(round(overpaid_discounted_pc, 1))  # реальная переплата %
+            self.overpaid = str(round(overpaid, self.decimal))  # переплата номинальная
+            self.overpaid_discounted = str(round(overpaid_discounted, self.decimal)) # переплата реальная (с учетом инфляции)
+            self.annuity = str(round(payment_month, self.decimal))  # аннуитетный платеж (с учетом ежемсячных комиссий)
+            self.interest_effective = str(round(interest_effective,
+                                            1))  # эффективная % ставка по кредиту (с учетом комиссий)
+            self.interest_over_inflate = str(round(eff_interest_discount_pc,
+                                               1))  # превышение эффективной ставки над инфляцией
 
-    
-    
     
     @property
     def periods(self):

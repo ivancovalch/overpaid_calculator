@@ -1,5 +1,3 @@
-import os
-
 from kivy.config import Config
 
 Config.set("graphics", 'fullscreen', 0)
@@ -9,22 +7,11 @@ Config.set("graphics", 'fullscreen', 0)
 
 
 from kivymd.app import MDApp
-from kivy.lang import Builder, Parser
+from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.utils import platform
 
-from kivymd.uix.button import MDRectangleFlatButton
-from kivymd.uix.gridlayout import MDGridLayout
-from kivymd.uix.floatlayout import MDFloatLayout
-from kivymd.uix.screen import Screen
-from kivymd.uix.card import MDCard
-from kivymd.color_definitions import colors
-from kivy.uix.popup import Popup
-from kivy.properties import ListProperty, DictProperty
-
-import models
 import views
-from calcl import LoanPay as Lp
 
 
 if (platform != 'android' ):
@@ -32,28 +19,10 @@ if (platform != 'android' ):
 
 Builder.load_file('views.kv')
 
-
-def print_hi():
-    loan = 100000
-    periods = 5
-    month = False
-    interest = 11
-    inflate = 8.6
-    comiss = 20
-    insurance = 100
-    decimal = 2
-
-    lpcur = Lp(loan, periods, month, interest, inflate, comiss, insurance, decimal)
-
-    print(lpcur.__dict__)
-
 class OverPaidCalculatorApp(MDApp):
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-
 
     def build(self):
 
