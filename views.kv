@@ -15,9 +15,6 @@
     mode: "fill"
     height: self.minimum_height
     input_type: 'number'
-    #fill_color: 0.2, 0.2, 0.2, .4
-    #on_focus: app.root.on_focus_callback(self)
-
 
 <MDLRes@MDLabel>
     id: lb_loanoverpaidisc_text
@@ -33,20 +30,6 @@
     valign: "center"
     font_size : dp(14)
 
-<Popups>:
-    id: popup1
-    Label:
-        id: lb_popup
-        text: "Ошибка"
-        size_hint: 0.6, 0.2
-        pos_hint: {"x":0.2, "top":1}
-    Button:
-        id: bt_popup1
-        text: "Закрыть"
-        size_hint: 1, 0.4 # установить размер кнопки
-        pos_hint: {"x":0, "y":0.1} # установить положение кнопки
-
-
 #--------------------------------------------------
 <Container>:
     title: "Калькулятор переплаты по кредиту"
@@ -59,15 +42,11 @@
         #right_action_items: [["exit-to-app", lambda x: app.Exit()]]
         md_bg_color: [0,0,0,1]# app.theme_cls.accent_color
         specific_text_color: [.9,.9,.9,1]#app.theme_cls.accent_color
-        #elevation: 10
+        elevation: 5
         pos_hint: {"top": 1, "center_x": .5}
-        #pos_hint_y: None
-        #pos_hint_y: 1
 
     MDBoxLayout:
         id: bx_main # Основной бокс в котором расположено все кроме тулбара
-        #x: toolbar.height
-        size_hint_y: None
         size_hint_y: 1.0 - tb_upper.height/root.height
 
         MDGridLayout: # корневой виджет включающий два основных горизонтальных элемента
@@ -77,6 +56,7 @@
             canvas:
                 Color:
                     rgba: (0.1, 0.8, 0.1, 1)
+            #
             padding: "10dp"
             spacing: "10dp"
 
@@ -100,7 +80,7 @@
                         theme_text_color: "Primary"
                         #spacing: "5dp"
                         size_hint_y: 1
-                        size_hint_x: .6
+                        #size_hint_x: .6
                     MDLabel:
                         id: lb_currency
                         text: ""
@@ -135,8 +115,6 @@
                     height: self.minimum_height
                     size_hint_x: 1
                     #height: root.credit_input.height #self.minimum_height
-                    #adaptive_height: False
-                    # height: "80dp"
 
                     TFbase: # СУММА
                         id: loan
@@ -168,10 +146,6 @@
                         helper_text_mode: "on_error"
                         size_hint_x: .2
                         halign: "right"
-                        #padding: ["2dp","2dp","2dp","2dp"]
-                        #pos_hint: {"center_y": 0.5,"center_x": 0.5}
-                        #width: self.minimum_width
-                        #on_text: 
                         on_focus: root.validate('periods')
 
                     MDGridLayout:
@@ -391,26 +365,37 @@
                         orientation: "horizontal"
                         size_hint_x: 0.4
                         pos_hint: {"bottom": 0, "center_x": .5}
+
                         MDIstar:
                             id: ic_rank_0
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_1
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_2
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_3
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_4
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_5
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_6
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_7
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_8
+                            font_size : dp(14)
                         MDIstar:
                             id: ic_rank_9
+                            font_size : dp(14)
 
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -434,8 +419,6 @@
                         text: root.lp.overpaid_discounted_pc # переплата в процентах
                         font_style: "Body2"
                         theme_text_color: "Custom"
-                        #padding: ("10dp","10dp","10dp","10dp")
-                        #spacing: "5dp"
                         size_hint_x: 0.2
                         halign: "right"
                         valign: "bottom"
@@ -466,71 +449,66 @@
                         size_hint_x: 0.2
                         size_hint_y: None
                         height: "5dp"
-                        #md_bg_color: color_light_red #[1,.3,0,1] # Red - Overpay
 
                 MDGridLayout:
                     cols: 2
                     rows: 6
                     padding: [0,0,0,0]
-                    #spacing: "5dp"
                     size_hint_y: None
                     height: self.minimum_height
-                    #adaptive_height: True
-                    #row_default_height: 500
-                    #md_bg_color: 0.708, 0.281, 0.097, 1
-                    #orientation: "horizontal"
+
                     MDLRes:
                         id: lb_loanoverpaidisc_text
                         text: "фактическая переплата"
-                        #size_hint_x: 0.7
-                        #padding: [10,0,0,0]
+
                     MDLRes:
                         id: lb_loanoverpaidisc
-                        # дисконтированная переплата в валютных единицах (рубли и т.п.)
                         text: root.lp.overpaid_discounted
                         halign: "right"
-                        #size_hint_x: 0.3
+
                     MDLRes:
                         id: lb_loanoverpaid_text
                         text: "номинальная переплата"
                         halign: "left"
-                        #size_hint_x: 0.7
+
                     MDLRes:
                         id: lb_loanoverpaid # числовое значение суммы долга
                         text: root.lp.overpaid
                         halign: "right"
-                        #size_hint_x: 0.3
+
                     MDLRes:
                         id: blank1r
+
                     MDLRes:
                         id: blank1l # числовое значение суммы долга
+
                     MDLRes:
                         id: lb_annuity_text
                         text: "аннуитетный платеж"
                         halign: "left"
-                        #size_hint_x: 0.7
+
                     MDLRes:
                         id: lb_annuity # числовое значение суммы долга
                         text: root.lp.annuity
                         halign: "right"
-                        #size_hint_x: 0.3
+
                     MDLRes:
                         id: lb_efinterest_text
                         text: "эффективная ставка"
                         halign: "left"
-                        #size_hint_x: 0.7
+
                     MDLRes:
                         id: lb_efinterest # числовое значение суммы долга
                         text: root.lp.interest_effective
                         halign: "right"
-                        #size_hint_x: 0.3
+
                     MDLRes:
                         id: lb_efinterest_infl_text
                         text: "выше инфляции на"
-                        #size_hint_x: 0.7
                         halign: 'right'
+
                     MDLRes:
                         id: lb_efinterest_infl # числовое значение суммы долга
                         text: root.lp.interest_over_inflate
                         halign: "right"
-                        #size_hint_x: 0.3
+
