@@ -2,7 +2,7 @@
 #:import utils kivy.utils
 #:import get_color_from_hex kivy.utils
 
-<TFbase@MDTextField>:
+<TFbase>:
     multiline: False
     text_size: self.size
     font_size: "18dp"
@@ -15,6 +15,7 @@
     mode: "fill"
     height: self.minimum_height
     input_type: 'tel'
+    on_focus: self.clear_text()
 
 <MDLRes@MDLabel>
     id: lb_loanoverpaidisc_text
@@ -118,6 +119,7 @@
 
                     TFbase: # СУММА
                         id: loan
+                        name: 'loan'
                         icon_right: "cash-multiple"
                         icon_color: "primary"
                         font_style: "Body2"
@@ -133,10 +135,12 @@
                         #pos_hint: {"center_y": 0.5,"left": 0}
                         #on_text: root.calculate()
                         #on_text_validate: root.validate_loan(self)
-                        on_focus: root.validate('loan')
+                        #on_focus: root.validate('loan')
+                        #on_focus: self.test()
 
                     TFbase:
                         id: periods
+                        name: 'periods'
                         icon_right: "clipboard-text-clock-outline"
                         hint_text: "ПЕРИОДЫ"
                         text: ""
@@ -146,7 +150,7 @@
                         helper_text_mode: "on_error"
                         size_hint_x: .2
                         halign: "right"
-                        on_focus: root.validate('periods')
+                        #on_focus: root.validate('periods')
 
                     MDGridLayout:
                         cols:2
@@ -199,6 +203,7 @@
 
                     TFbase:
                         id: interest
+                        name: 'interest'
                         icon_right: "percent"
                         hint_text: "ПРОЦЕНТНАЯ СТАВКА"
                         text: ""
@@ -208,10 +213,11 @@
                         helper_text_mode: "on_error"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate('interest')
+                        #on_focus: root.validate('interest')
                         #on_text_validate: root.ftext_validate(self, 'ti_interest')
                     TFbase:
                         id: inflate
+                        name: 'inflate'
                         icon_right: "percent-outline"
                         hint_text: "ОЖИДАЕМАЯ ИНФЛЯЦИЯ"
                         text: ""
@@ -224,7 +230,7 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate('inflate')
+                        #on_focus: root.validate('inflate')
 
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -237,6 +243,7 @@
 
                     TFbase:
                         id: comiss
+                        name: 'comiss'
                         icon_right: "cash"
                         hint_text: "КОМИССИИ"
                         text: ""
@@ -249,10 +256,11 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate('comiss')
+                        #on_focus: root.validate('comiss')
 
                     TFbase:
                         id: insurance
+                        name: 'insurance'
                         icon_right: "briefcase"
                         hint_text: "РАСХОДЫ НА СТРАХОВКУ"
                         text: ""
@@ -265,7 +273,7 @@
                         theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
-                        on_focus: root.validate('insurance')
+                        #on_focus: root.validate('insurance')
 # RESULTS -----------------------------------------------------------------------
             MDBoxLayout: # MDCard:
                 id: c_results

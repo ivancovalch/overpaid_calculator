@@ -1,4 +1,4 @@
-
+from kivy.app import App
 from kivymd.uix.screen import Screen
 from kivymd.uix.textfield import MDTextField
 from kivy.properties import StringProperty, ColorProperty, NumericProperty
@@ -35,40 +35,6 @@ class Container(Screen):
         self.set_stars(None, 8)
 
         self.lp.calculate()
-
-    def validate(self, name):
-        instance = self.ids[name]
-        #base_cls = instance.__class__.__bases__[0]
-        #print(super(MDTextField, instance.__self__))
-        if instance.focus is True:
-            #instance.on_focus(None, True)
-            return #super(MDTextField, instance.__self__).on_focus()
-        
-        if 'int' in instance.input_filter:
-            val = (int)(instance.text)
-        else:
-            val = (float)(instance.text)
-            
-        if name in ('comiss', 'insurance') and val < 0:
-            instance.error = True
-            #instance.on_error(None, True)
-            return
-        elif val <= 0:
-            instance.error = True
-            #base_cls.on_error(instance, None, True)
-            #print(instance)
-            #instance.error(True)
-            #return super()
-        else:
-            instance.error = False
-
-        setattr(self.lp, name, val)
-
-        try:
-            self.lp.calculate()
-        except:
-            instance.error = True
-
 
     def validate_checkbox(self):
         if self.ids.cb_month.active:
@@ -127,18 +93,56 @@ class Container(Screen):
             else:
                 star.icon = "star-outline"
 
-# class TFbase(MDTextField):
+class TFbase(MDTextField):
 
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
+    name = StringProperty()
 
-#     def error(self, is_error):
-#         print('hi')
-#         self.super().on_error(None, is_error)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
+    def on_focus(self, instance, value, *largs):
+        root = App.get_running_app().root
+        if root is None:
+            return super().on_focus(instance, value, *largs)
 
+        self.validate(root)
+        return super().on_focus(instance, value, *largs)
 
+    def validate(self, root):
+            instance = self
+            name = self.name
 
+            if instance.focus:
+                return
 
+            if not instance.text:
+                instance.text = str(getattr(root.lp, name))
 
+            try:
+                if 'int' in instance.input_filter:
+                    val = (int)(instance.text)
+                else:
+                    val = (float)(instance.text)
+            except:
+                instance.error = True
+                
+            if str(name) not in ('comiss', 'insurance') and val <= 0:
+                instance.error = True
+                return
+            elif val < 0:
+                print(str(name) in ('comiss',), val < 0.0)
+                instance.error = True
+                return
+            else:
+                instance.error = False
 
+            setattr(root.lp, name, val)
+
+            try:
+                root.lp.calculate()
+            except:
+                instance.error = True
+    
+    def clear_text(self):
+        if self.focus:
+            self.text = ''
