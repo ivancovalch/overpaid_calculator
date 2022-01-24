@@ -30,7 +30,6 @@ class LoanPay(EventDispatcher):
         self.interest_effective     - эффективная % ставка по кредиту (с учетом комиссий)
         self.interest_over_inflate  - превышение эффективной ставки над инфляцией'''
 
-    prop = StringProperty()
     rank = StringProperty()
     interest_discounted = StringProperty()
     overpaid_discounted_pc = StringProperty()

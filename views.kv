@@ -14,7 +14,7 @@
     #pos_hint: {"center_y": .5}
     mode: "fill"
     height: self.minimum_height
-    input_type: 'number'
+    input_type: 'tel'
 
 <MDLRes@MDLabel>
     id: lb_loanoverpaidisc_text
@@ -28,7 +28,7 @@
     icon: "star"
     halign: "left"
     valign: "center"
-    font_size : dp(14)
+    #font_size: dp(14)
 
 #--------------------------------------------------
 <Container>:
@@ -334,7 +334,8 @@
 
                     MDLabel:
                         id: lb_quality
-                        text: ""
+                        text: root.quality
+                        text_color: root.quality_color
                         font_style: "Body1"
                         theme_text_color: "Custom"
                         pos_hint: {"bottom": 0, "center_x": .5}
@@ -343,6 +344,7 @@
                     MDLabel:
                         id: lb_rank
                         text: root.lp.rank
+                        text_color: root.quality_color
                         font_style: "H6"
                         theme_text_color: "Custom"
                         size_hint_x: 0.2
@@ -353,6 +355,7 @@
                     MDLabel:
                         id: lb_rank_text
                         text: "/10"
+                        text_color: root.quality_color
                         font_style: "Body2"
                         theme_text_color: "Secondary"
                         spacing: "5dp"
@@ -362,6 +365,7 @@
                         halign: "left"
                         valign: "bottom"
                     MDBoxLayout:
+                        id: stars
                         orientation: "horizontal"
                         size_hint_x: 0.4
                         pos_hint: {"bottom": 0, "center_x": .5}
@@ -369,33 +373,43 @@
                         MDIstar:
                             id: ic_rank_0
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_1
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_2
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_3
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_4
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_5
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_6
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_7
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_8
                             font_size : dp(14)
+                            color: root.quality_color
                         MDIstar:
                             id: ic_rank_9
                             font_size : dp(14)
+                            color: root.quality_color
 
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -406,7 +420,8 @@
 
                     MDLabel:
                         id: lb_quality_hint
-                        text: "Качественная оценка"
+                        text: root.quality_hint
+                        text_color: root.quality_color
                         font_style: "Body1"
                         theme_text_color: "Custom"
                         #padding: ("10dp","10dp","10dp","10dp")
@@ -416,7 +431,9 @@
                         valign: "bottom"
                     MDLabel:
                         id: lb_loanoverpaidiscpc
-                        text: root.lp.overpaid_discounted_pc # переплата в процентах
+                        # переплата в процентах
+                        text: root.lp.overpaid_discounted_pc
+                        text_color: root.overpaid_color 
                         font_style: "Body2"
                         theme_text_color: "Custom"
                         size_hint_x: 0.2
@@ -438,7 +455,7 @@
                         text: ""
                         font_style: "Body2"
                         padding_x: 10
-                        size_hint_x: 0.8
+                        size_hint_x: root.money_back_bar_size
                         size_hint_y: None
                         height: "5dp"
                         md_bg_color: utils.get_color_from_hex("#6EE768")
@@ -446,9 +463,10 @@
                         id: lb_money_over
                         font_style: "Body2"
                         padding_x: 10
-                        size_hint_x: 0.2
+                        size_hint_x: root.money_over_bar_size
                         size_hint_y: None
                         height: "5dp"
+                        md_bg_color: root.overpaid_color
 
                 MDGridLayout:
                     cols: 2
@@ -460,20 +478,24 @@
                     MDLRes:
                         id: lb_loanoverpaidisc_text
                         text: "фактическая переплата"
+                        text_color: root.overpaid_color
 
                     MDLRes:
                         id: lb_loanoverpaidisc
                         text: root.lp.overpaid_discounted
+                        text_color: root.overpaid_color
                         halign: "right"
 
                     MDLRes:
                         id: lb_loanoverpaid_text
                         text: "номинальная переплата"
+                        text_color: root.quality_color
                         halign: "left"
 
                     MDLRes:
                         id: lb_loanoverpaid # числовое значение суммы долга
                         text: root.lp.overpaid
+                        text_color: root.quality_color
                         halign: "right"
 
                     MDLRes:
@@ -485,30 +507,37 @@
                     MDLRes:
                         id: lb_annuity_text
                         text: "аннуитетный платеж"
+                        text_color: root.quality_color
                         halign: "left"
+
 
                     MDLRes:
                         id: lb_annuity # числовое значение суммы долга
                         text: root.lp.annuity
+                        text_color: root.quality_color
                         halign: "right"
 
                     MDLRes:
                         id: lb_efinterest_text
+                        text_color: root.quality_color
                         text: "эффективная ставка"
                         halign: "left"
 
                     MDLRes:
                         id: lb_efinterest # числовое значение суммы долга
                         text: root.lp.interest_effective
+                        text_color: root.quality_color
                         halign: "right"
 
                     MDLRes:
                         id: lb_efinterest_infl_text
                         text: "выше инфляции на"
+                        text_color: root.quality_color
                         halign: 'right'
 
                     MDLRes:
                         id: lb_efinterest_infl # числовое значение суммы долга
                         text: root.lp.interest_over_inflate
+                        text_color: root.quality_color
                         halign: "right"
 

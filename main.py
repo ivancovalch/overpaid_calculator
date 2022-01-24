@@ -1,6 +1,5 @@
 from kivy.config import Config
 
-Config.set("graphics", 'fullscreen', 0)
 #Config.set('modules', 'screen', 'onex')
 #Config.set('graphics', 'width', '540')
 #Config.set('graphics', 'height', '960')
@@ -15,7 +14,9 @@ import views
 
 
 if (platform != 'android' ):
+    Config.set("graphics", 'fullscreen', 0)
     Window.size = (540, 960)
+    Window.top = 30
 
 Builder.load_file('views.kv')
 
