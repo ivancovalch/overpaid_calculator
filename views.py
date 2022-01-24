@@ -118,6 +118,12 @@ class TFbase(MDTextField):
             if not instance.text:
                 instance.text = str(getattr(root.lp, name))
 
+            if len(instance.text) > instance.max_text_length:
+                instance.error = True
+                return
+            else:
+                instance.error = False
+
             try:
                 if 'int' in instance.input_filter:
                     val = (int)(instance.text)
@@ -126,11 +132,10 @@ class TFbase(MDTextField):
             except:
                 instance.error = True
                 
-            if str(name) not in ('comiss', 'insurance') and val <= 0:
+            if str(name) not in ('comiss', 'insurance', 'inflate') and val <= 0:
                 instance.error = True
                 return
-            elif val < 0:
-                print(str(name) in ('comiss',), val < 0.0)
+            elif str(name) is not 'inflate' and val < 0:
                 instance.error = True
                 return
             else:
