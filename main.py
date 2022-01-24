@@ -16,6 +16,7 @@ import views
 if (platform != 'android' ):
     Config.set("graphics", 'fullscreen', 0)
     Window.size = (540, 960)
+    Window.fullscreen = False
     Window.top = 30
 
 Builder.load_file('views.kv')

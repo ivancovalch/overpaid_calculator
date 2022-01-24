@@ -459,7 +459,7 @@
                     pos_hint: {"top": 1, "center_x": .5}
 
                     MDLabel:
-                        id: lb_money_back
+                        id: lb_money_back  # левый сегмент полосы - шкалы переплаты - ТЕЛО ДОЛГА
                         text: ""
                         font_style: "Body2"
                         padding_x: 10
@@ -468,7 +468,7 @@
                         height: "5dp"
                         md_bg_color: utils.get_color_from_hex("#6EE768")
                     MDLabel:
-                        id: lb_money_over
+                        id: lb_money_over  # правый сегмент полосы - шкалы переплаты - ПЕРЕПЛАТА
                         font_style: "Body2"
                         padding_x: 10
                         size_hint_x: root.money_over_bar_size
