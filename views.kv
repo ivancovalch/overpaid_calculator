@@ -170,8 +170,8 @@
                         MDLabel:
                             text: "Месяцы"
                             theme_text_color: "Secondary"
-                            #font_size: "12dp"
-                            font_style: "Body2"
+                            font_size: "12dp"
+                            #font_style: "Body2"
                             pos_hint: {"right": 1,"top":1}
                         CheckBox:
                             id: cb_year
@@ -305,28 +305,28 @@
                     id: lb_nominal_term
                     markup: True
                     text: "[color=#FFFAFA]Номинальная переплата[/color] = проценты + комиссии и прочие платежи банку сверх суммы основного долга"
-                    font_style: "Body2"
+                    font_size: dp(14)
                     theme_text_color: "Hint"
                     pos_hint: {"top": 1, "center_x": .5}
                 MDLabel:
                     id: lb_fact_term
                     markup: True
                     text: "[color=#FFFAFA]Фактическая переплата[/color] = номинальная переплата - уменьшение стоимости (покупательной способности) денег из-за инфляции"
-                    font_style: "Body2"
+                    font_size: dp(14)
                     theme_text_color: "Hint"
                     pos_hint: {"top": 1, "center_x": .5}
                 MDLabel:
                     id: lb_effective_term
                     markup: True
                     text: "[color=#FFFAFA]Эффективная ставка[/color] = процентная ставка с учетом допплатежей (комиссии и т.п.)"
-                    font_style: "Body2"
+                    font_size: dp(14)
                     theme_text_color: "Hint"
                     pos_hint: {"top": 1, "center_x": .5}
                 MDLabel:
                     id: lb_quality_term
                     markup: True
                     text: "[color=#FFFAFA]Дороговизна|качество кредита[/color] = эффективная ставка - инфляция"
-                    font_style: "Body2"
+                    font_size: dp(14)
                     theme_text_color: "Hint"
                     pos_hint: {"top": 1, "center_x": .5}
 
