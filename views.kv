@@ -48,8 +48,9 @@
         title: "Калькулятор переплаты по кредиту"
         type: "top"
         #left_action_items: [["menu", lambda x: app.callback()]]
-        #right_action_items: [["exit-to-app", lambda x: app.Exit()]]
+        right_action_items: [["exit-to-app", lambda x: app.stop()]]
         md_bg_color: [0,0,0,1]# app.theme_cls.accent_color
+        theme_text_color: "Custom"
         text_color: [.9,.9,.9, 1] # app.theme_cls.accent_color # [.1,.1,.3,1]#
         specific_text_color: [.9,.9,.9,1]#app.theme_cls.accent_color # похоже не работает
         elevation: 5
@@ -103,7 +104,8 @@
                         id: b_clean
                         text: "Очистить"
                         font_style: "Body2"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Custom"
+                        text_color: [.9, .9, .9, 1]
                         pos_hint: {"center_y": .5, "right": 1}
                         md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
                         elevation: 10
@@ -319,7 +321,8 @@
                         id: b_calculate
                         text: "Рассчитать"
                         font_style: "Body2"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Custom"
+                        text_color: [.9, .9, .9, 1]
                         pos_hint: {"center_y": .5, "right": 1}
                         md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
                         elevation: 10

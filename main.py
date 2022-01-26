@@ -4,7 +4,6 @@ from kivy.config import Config
 #Config.set('graphics', 'width', '540')
 #Config.set('graphics', 'height', '960')
 
-
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
