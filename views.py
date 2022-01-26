@@ -77,11 +77,11 @@ class Container(Screen):
             self.quality_color = [.9, 0.1, 0.1, 1]
 
         # Модификация вида виджетов в зависимости от полученного результата
-        widg_maincol = ['lb_annuity_text', 'lb_annuity','lb_loanoverpaid_text', 'lb_loanoverpaid', 'lb_money_back',
-                        'lb_money_over','lb_results', 'lb_efinterest_text', 'lb_efinterest', 'lb_efinterest_infl_text',
-                        'lb_efinterest_infl'] # список виджетов, которые необходимо модифицировать исходя из качества
-        for thewidget in widg_maincol:
-            self.ids[thewidget].text_color = self.quality_color
+        # widg_maincol = ['lb_annuity_text', 'lb_annuity','lb_loanoverpaid_text', 'lb_loanoverpaid', 'lb_money_back',
+        #                 'lb_money_over','lb_results', 'lb_efinterest_text', 'lb_efinterest', 'lb_efinterest_infl_text',
+        #                 'lb_efinterest_infl'] # список виджетов, которые необходимо модифицировать исходя из качества
+        # for thewidget in widg_maincol:
+        #     self.ids[thewidget].text_color = self.quality_color
 
 
     def set_overpaid(self, obj, val):
@@ -92,20 +92,23 @@ class Container(Screen):
             self.overpaid_color = [1, .3, .1, 1]
         else:
             self.overpaid_color = [.1, .7, .1, 1]
-            overpaid_discounted_to_scale = - overpaid_discounted_to_scale # для формирования шкалы нужны положительные величины
+            # для формирования шкалы нужны положительные величины
+            overpaid_discounted_to_scale = - overpaid_discounted_to_scale
 
         # Расчет размера шкалы и его элементов
-        total_scale_length = overpaid_discounted_to_scale + self.lp.loan # шкала = тело долга + переплаты
-        self.money_back_bar_size = self.lp.loan / total_scale_length  # делим для нормализации (приводим к долям целого)
+        # шкала = тело долга + переплаты
+        total_scale_length = overpaid_discounted_to_scale + self.lp.loan
+        # делим для нормализации (приводим к долям целого)
+        self.money_back_bar_size = self.lp.loan / total_scale_length
         self.money_over_bar_size = overpaid_discounted_to_scale / total_scale_length
         print(f"overpaid_discounted_to_scale {overpaid_discounted_to_scale}")
         print(f"total_scale_length {total_scale_length}")
         print(f"loan {self.lp.loan}")
 
         # Устанавливаем цветовые значения виджетов шкалы в зависимости от знака переплаты
-        self.ids.lb_money_over.md_bg_color =  self.overpaid_color
-        for thewidget in ['lb_loanoverpaidiscpc', 'lb_loanoverpaidisc_text', 'lb_loanoverpaidisc']:
-            self.ids[thewidget].text_color = self.overpaid_color
+        # self.ids.lb_money_over.md_bg_color =  self.overpaid_color
+        # for thewidget in ['lb_loanoverpaidiscpc', 'lb_loanoverpaidisc_text', 'lb_loanoverpaidisc']:
+        #     self.ids[thewidget].text_color = self.overpaid_color
 
 
     def set_stars(self, obj, val):
@@ -172,6 +175,15 @@ class TFbase(MDTextField):  # MDTextField
                 root.lp.calculate()
             except:
                 instance.error = True
+
+    def insert_text(self, substring, from_undo=False):
+        if not self.name in 'inflate':
+            substring = substring.replace('-', '')
+
+        if len(self.text) >= self.max_text_length:
+            substring = ''
+            
+        return super().insert_text(substring, from_undo)
 
     def clear_text(self):
         if self.focus:
