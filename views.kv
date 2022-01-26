@@ -15,10 +15,18 @@
     mode: "fill"
     height: self.minimum_height
     input_type: 'tel'
+    line_color_focus: [1, 1, 1, 1]
     on_focus: self.clear_text()
+    #size_hint: 1, None
+    #height: "30dp"
+
+<LСomment@MDLabel>
+    markup: True
+    font_size: dp(12)
+    theme_text_color: "Hint"
+    pos_hint: {"top": 1, "center_x": .5}
 
 <MDLRes@MDLabel>
-    id: lb_loanoverpaidisc_text
     font_style: "Body2"
     size_hint_y: None
     height: "20dp"
@@ -42,7 +50,8 @@
         #left_action_items: [["menu", lambda x: app.callback()]]
         #right_action_items: [["exit-to-app", lambda x: app.Exit()]]
         md_bg_color: [0,0,0,1]# app.theme_cls.accent_color
-        specific_text_color: [.9,.9,.9,1]#app.theme_cls.accent_color
+        text_color: [.9,.9,.9, 1] # app.theme_cls.accent_color # [.1,.1,.3,1]#
+        specific_text_color: [.9,.9,.9,1]#app.theme_cls.accent_color # похоже не работает
         elevation: 5
         pos_hint: {"top": 1, "center_x": .5}
 
@@ -70,39 +79,36 @@
                 size_hint_y: 0.4
                 #pos: 1,1
                 pos_hint: {"center_x": .5, "top": 1}
-                md_bg_color: (.15,.15,.15,1)
+                md_bg_color: (.2, .2, .2, 1)
 
                 MDBoxLayout:
                     padding: ["10dp", "5dp","5dp","5dp"]
                     pos_hint: {"center_x": .5, "top": 1}
                     MDLabel:
-                        text: "Ввод данных кредита"
+                        text: "Ввод данных"
                         font_style: "H6"
                         theme_text_color: "Primary"
-                        #spacing: "5dp"
                         size_hint_y: 1
-                        #size_hint_x: .6
                     MDLabel:
                         id: lb_currency
                         text: ""
                         font_style: "Body2"
                         theme_text_color: "Secondary"
                         pos_hint: {"top": 1, "right": 1}
-                        #padding: ["10dp",0,0,0]
                         size_hint_y: 1
                         size_hint_x: .2
                         pos: 1, 1
                         halign: "right"
-#                    MDLabel:
-#                        id: lb_countryflag
-#                        text: ""
-#                        font_style: "Body2"
-#                        theme_text_color: "Primary"
-#                        pos_hint: {"top": 1, "right": 1}
-#                        #padding: ["10dp",0,0,0]
-#                        halign: "right"
-#                        size_hint_y: 1
-#                        size_hint_x: .2
+                    MDRaisedButton:
+                        id: b_clean
+                        text: "Очистить"
+                        font_style: "Body2"
+                        theme_text_color: "Secondary"
+                        pos_hint: {"center_y": .5, "right": 1}
+                        md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
+                        elevation: 10
+                        #pos: 1, 1
+
 
                 # СУММА И ПЕРИОДЫ
                 MDBoxLayout:
@@ -137,6 +143,14 @@
                         #on_text_validate: root.validate_loan(self)
                         #on_focus: root.validate('loan')
                         #on_focus: self.test()
+                        #mode: "fill"
+                        text_color: [1, 1, 1, 1]
+                        theme_text_color: "Custom"
+#                        color: [1, 1, 1, 1]
+#                        background_color: [0,0,0,1]
+#                        foreground_color: [0,0,0,1]
+#                        disabled_foreground_color: [0,0,0,1]
+                        line_color_focus: [1, 1, 1, 1]
 
                     TFbase:
                         id: periods
@@ -180,8 +194,8 @@
                         MDLabel:
                             text: "Годы"
                             theme_text_color: "Secondary"
-                            #font_size: "12dp"
-                            font_style: "Body2"
+                            font_size: "12dp"
+                            #font_style: "Body2"
 
 #                    MDIcon: # иконка календарь-время
 #                        icon: "calendar-clock" # "gmail" #
@@ -219,7 +233,7 @@
                         id: inflate
                         name: 'inflate'
                         icon_right: "percent-outline"
-                        hint_text: "ОЖИДАЕМАЯ ИНФЛЯЦИЯ"
+                        hint_text: "ИНФЛЯЦИЯ"
                         text: ""
                         max_text_length: 4
                         input_filter: 'float'
@@ -262,7 +276,7 @@
                         id: insurance
                         name: 'insurance'
                         icon_right: "briefcase"
-                        hint_text: "РАСХОДЫ НА СТРАХОВКУ"
+                        hint_text: "СТРАХОВАНИЕ"
                         text: ""
                         max_text_length: 7
                         input_filter: 'float'
@@ -274,6 +288,7 @@
                         pos_hint: {"center_y": .5}
                         #on_text: root.calculate()
                         #on_focus: root.validate('insurance')
+
 # RESULTS -----------------------------------------------------------------------
             MDBoxLayout: # MDCard:
                 id: c_results
@@ -300,36 +315,14 @@
                         #padding: ["10dp",0,0,0]
                         size_hint_y: 1
                         size_hint_x: 1
-
-                MDLabel:
-                    id: lb_nominal_term
-                    markup: True
-                    text: "[color=#FFFAFA]Номинальная переплата[/color] = проценты + комиссии и прочие платежи банку сверх суммы основного долга"
-                    font_size: dp(14)
-                    theme_text_color: "Hint"
-                    pos_hint: {"top": 1, "center_x": .5}
-                MDLabel:
-                    id: lb_fact_term
-                    markup: True
-                    text: "[color=#FFFAFA]Фактическая переплата[/color] = номинальная переплата - уменьшение стоимости (покупательной способности) денег из-за инфляции"
-                    font_size: dp(14)
-                    theme_text_color: "Hint"
-                    pos_hint: {"top": 1, "center_x": .5}
-                MDLabel:
-                    id: lb_effective_term
-                    markup: True
-                    text: "[color=#FFFAFA]Эффективная ставка[/color] = процентная ставка с учетом допплатежей (комиссии и т.п.)"
-                    font_size: dp(14)
-                    theme_text_color: "Hint"
-                    pos_hint: {"top": 1, "center_x": .5}
-                MDLabel:
-                    id: lb_quality_term
-                    markup: True
-                    text: "[color=#FFFAFA]Дороговизна|качество кредита[/color] = эффективная ставка - инфляция"
-                    font_size: dp(14)
-                    theme_text_color: "Hint"
-                    pos_hint: {"top": 1, "center_x": .5}
-
+                    MDRaisedButton:
+                        id: b_calculate
+                        text: "Рассчитать"
+                        font_style: "Body2"
+                        theme_text_color: "Secondary"
+                        pos_hint: {"center_y": .5, "right": 1}
+                        md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
+                        elevation: 10
 
                 MDGridLayout:
                     cols: 4
@@ -353,7 +346,7 @@
                         id: lb_rank
                         text: root.lp.rank
                         text_color: root.quality_color
-                        font_style: "H6"
+                        font_style: "Body2"
                         theme_text_color: "Custom"
                         size_hint_x: 0.2
                         pos_hint: {"bottom": 0, "center_x": .5}
@@ -549,3 +542,43 @@
                         text_color: root.quality_color
                         halign: "right"
 
+# БЛОК С СПРАВОЧНОЙ ИНФОРМАЦИЕЙ - ОПРЕДЕЛЕНИЕМ ТЕРМИНОВ ---------------------
+
+#                MDBoxLayout:
+#                    padding: [5,20,5,5]
+#                    md_bg_color: (.3,.3,.3,1)
+#                    orientation: "vertical"
+#                    adaptive_height: True
+#                    size_hint: None, None
+#                    height: self.minimum_height
+                MDLabel:
+                    text: ""
+
+                MDLabel:
+                    id: lb_nominal_term
+                    markup: True
+                    text: "[color=#D3D3D3]Номинальная переплата[/color] = проценты + комиссии и прочие платежи банку сверх суммы основного долга"
+                    font_size: dp(14)
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_fact_term
+                    markup: True
+                    text: "[color=#D3D3D3]Фактическая переплата[/color] = номинальная переплата - уменьшение стоимости (покупательной способности) денег из-за инфляции"
+                    font_size: dp(14)
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_effective_term
+                    markup: True
+                    text: "[color=#D3D3D3]Эффективная ставка[/color] = процентная ставка с учетом допплатежей (комиссии и т.п.)"
+                    font_size: dp(14)
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}
+                MDLabel:
+                    id: lb_quality_term
+                    markup: True
+                    text: "[color=#D3D3D3]Дороговизна|качество кредита[/color] = эффективная ставка - инфляция"
+                    font_size: dp(14)
+                    theme_text_color: "Hint"
+                    pos_hint: {"top": 1, "center_x": .5}

@@ -1,6 +1,7 @@
 from kivy.app import App
 from kivymd.uix.screen import Screen
 from kivymd.uix.textfield import MDTextField
+from kivymd.uix.textfield import MDTextFieldRect
 from kivy.properties import StringProperty, ColorProperty, NumericProperty
 
 from calcl import LoanPay
@@ -97,6 +98,9 @@ class Container(Screen):
         total_scale_length = overpaid_discounted_to_scale + self.lp.loan # шкала = тело долга + переплаты
         self.money_back_bar_size = self.lp.loan / total_scale_length  # делим для нормализации (приводим к долям целого)
         self.money_over_bar_size = overpaid_discounted_to_scale / total_scale_length
+        print(f"overpaid_discounted_to_scale {overpaid_discounted_to_scale}")
+        print(f"total_scale_length {total_scale_length}")
+        print(f"loan {self.lp.loan}")
 
         # Устанавливаем цветовые значения виджетов шкалы в зависимости от знака переплаты
         self.ids.lb_money_over.md_bg_color =  self.overpaid_color
@@ -114,7 +118,7 @@ class Container(Screen):
             else:
                 star.icon = "star-outline"
 
-class TFbase(MDTextField):
+class TFbase(MDTextField):  # MDTextField
 
     name = StringProperty()
 
