@@ -37,6 +37,7 @@ class Container(Screen):
 
         self.lp.calculate()
 
+
     def validate_checkbox(self):
         if self.ids.cb_month.active:
             self.lp.is_month = True
@@ -76,14 +77,6 @@ class Container(Screen):
             # темно-красный
             self.quality_color = [.9, 0.1, 0.1, 1]
 
-        # Модификация вида виджетов в зависимости от полученного результата
-        # widg_maincol = ['lb_annuity_text', 'lb_annuity','lb_loanoverpaid_text', 'lb_loanoverpaid', 'lb_money_back',
-        #                 'lb_money_over','lb_results', 'lb_efinterest_text', 'lb_efinterest', 'lb_efinterest_infl_text',
-        #                 'lb_efinterest_infl'] # список виджетов, которые необходимо модифицировать исходя из качества
-        # for thewidget in widg_maincol:
-        #     self.ids[thewidget].text_color = self.quality_color
-
-
     def set_overpaid(self, obj, val):
         self.money_back_bar_size = (100 - float(self.lp.overpaid_discounted_pc)) / 100
         self.money_over_bar_size = float(self.lp.overpaid_discounted_pc) - 100
@@ -101,14 +94,6 @@ class Container(Screen):
         # делим для нормализации (приводим к долям целого)
         self.money_back_bar_size = self.lp.loan / total_scale_length
         self.money_over_bar_size = overpaid_discounted_to_scale / total_scale_length
-        print(f"overpaid_discounted_to_scale {overpaid_discounted_to_scale}")
-        print(f"total_scale_length {total_scale_length}")
-        print(f"loan {self.lp.loan}")
-
-        # Устанавливаем цветовые значения виджетов шкалы в зависимости от знака переплаты
-        # self.ids.lb_money_over.md_bg_color =  self.overpaid_color
-        # for thewidget in ['lb_loanoverpaidiscpc', 'lb_loanoverpaidisc_text', 'lb_loanoverpaidisc']:
-        #     self.ids[thewidget].text_color = self.overpaid_color
 
 
     def set_stars(self, obj, val):
@@ -120,6 +105,11 @@ class Container(Screen):
                 star.icon = "star-half-full"
             else:
                 star.icon = "star-outline"
+
+    def clear_inputs(self):
+        for widget in ['loan', 'periods', 'interest',
+                    'inflate', 'comiss', 'insurance']:
+            self.ids[widget].clear_text(force=True)
 
 class TFbase(MDTextField):  # MDTextField
 
@@ -185,6 +175,6 @@ class TFbase(MDTextField):  # MDTextField
             
         return super().insert_text(substring, from_undo)
 
-    def clear_text(self):
-        if self.focus:
+    def clear_text(self, force=False):
+        if self.focus or force:
             self.text = ''

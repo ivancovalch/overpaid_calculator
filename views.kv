@@ -1,6 +1,8 @@
 #:kivy 2.0.0
 #:import utils kivy.utils
 #:import get_color_from_hex kivy.utils
+#:import format_currency babel.numbers.format_currency
+#:import format_percent babel.numbers.format_percent
 
 <TFbase>:
     multiline: False
@@ -48,9 +50,8 @@
         title: "Калькулятор переплаты по кредиту"
         type: "top"
         #left_action_items: [["menu", lambda x: app.callback()]]
-        right_action_items: [["exit-to-app", lambda x: app.stop()]]
+        #right_action_items: [["exit-to-app", lambda x: app.Exit()]]
         md_bg_color: [0,0,0,1]# app.theme_cls.accent_color
-        theme_text_color: "Custom"
         text_color: [.9,.9,.9, 1] # app.theme_cls.accent_color # [.1,.1,.3,1]#
         specific_text_color: [.9,.9,.9,1]#app.theme_cls.accent_color # похоже не работает
         elevation: 5
@@ -92,7 +93,7 @@
                         size_hint_y: 1
                     MDLabel:
                         id: lb_currency
-                        text: ""
+                        text: "Валюта: " + app.currency
                         font_style: "Body2"
                         theme_text_color: "Secondary"
                         pos_hint: {"top": 1, "right": 1}
@@ -104,11 +105,11 @@
                         id: b_clean
                         text: "Очистить"
                         font_style: "Body2"
-                        theme_text_color: "Custom"
-                        text_color: [.9, .9, .9, 1]
+                        theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5, "right": 1}
                         md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
                         elevation: 10
+                        on_release: root.clear_inputs()
                         #pos: 1, 1
 
 
@@ -321,11 +322,11 @@
                         id: b_calculate
                         text: "Рассчитать"
                         font_style: "Body2"
-                        theme_text_color: "Custom"
-                        text_color: [.9, .9, .9, 1]
+                        theme_text_color: "Secondary"
                         pos_hint: {"center_y": .5, "right": 1}
                         md_bg_color: [.3,.3,.3,1]  # app.theme_cls.primary_color
                         elevation: 10
+                        on_release: root.lp.calculate()
 
                 MDGridLayout:
                     cols: 4
@@ -436,7 +437,7 @@
                     MDLabel:
                         id: lb_loanoverpaidiscpc
                         # переплата в процентах
-                        text: root.lp.overpaid_discounted_pc
+                        text: root.lp.overpaid_discounted_pc + '%'
                         text_color: root.overpaid_color 
                         font_style: "Body2"
                         theme_text_color: "Custom"
@@ -486,7 +487,8 @@
 
                     MDLRes:
                         id: lb_loanoverpaidisc
-                        text: root.lp.overpaid_discounted
+                        text:
+                            format_currency(root.lp.overpaid_discounted, app.currency, locale=app.locale)
                         text_color: root.overpaid_color
                         halign: "right"
 
@@ -498,7 +500,8 @@
 
                     MDLRes:
                         id: lb_loanoverpaid # числовое значение суммы долга
-                        text: root.lp.overpaid
+                        text:
+                            format_currency(root.lp.overpaid, app.currency, locale=app.locale)
                         text_color: root.quality_color
                         halign: "right"
 
@@ -517,7 +520,8 @@
 
                     MDLRes:
                         id: lb_annuity # числовое значение суммы долга
-                        text: root.lp.annuity
+                        text:
+                            format_currency(root.lp.annuity, app.currency, locale=app.locale)
                         text_color: root.quality_color
                         halign: "right"
 
@@ -529,7 +533,7 @@
 
                     MDLRes:
                         id: lb_efinterest # числовое значение суммы долга
-                        text: root.lp.interest_effective
+                        text: root.lp.interest_effective + '%'
                         text_color: root.quality_color
                         halign: "right"
 
@@ -541,7 +545,7 @@
 
                     MDLRes:
                         id: lb_efinterest_infl # числовое значение суммы долга
-                        text: root.lp.interest_over_inflate
+                        text: root.lp.interest_over_inflate + '%'
                         text_color: root.quality_color
                         halign: "right"
 
