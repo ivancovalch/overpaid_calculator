@@ -1,8 +1,7 @@
 #:kivy 2.0.0
 #:import utils kivy.utils
 #:import get_color_from_hex kivy.utils
-#:import format_currency babel.numbers.format_currency
-#:import format_percent babel.numbers.format_percent
+#:import currency locale.currency
 
 <TFbase>:
     multiline: False
@@ -488,7 +487,7 @@
                     MDLRes:
                         id: lb_loanoverpaidisc
                         text:
-                            format_currency(root.lp.overpaid_discounted, app.currency, locale=app.locale)
+                            currency(root.lp.overpaid_discounted)
                         text_color: root.overpaid_color
                         halign: "right"
 
@@ -501,7 +500,7 @@
                     MDLRes:
                         id: lb_loanoverpaid # числовое значение суммы долга
                         text:
-                            format_currency(root.lp.overpaid, app.currency, locale=app.locale)
+                            currency(root.lp.overpaid)
                         text_color: root.quality_color
                         halign: "right"
 
@@ -521,7 +520,7 @@
                     MDLRes:
                         id: lb_annuity # числовое значение суммы долга
                         text:
-                            format_currency(root.lp.annuity, app.currency, locale=app.locale)
+                            currency(root.lp.annuity)
                         text_color: root.quality_color
                         halign: "right"
 

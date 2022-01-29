@@ -1,7 +1,6 @@
 from kivy.app import App
 from kivymd.uix.screen import Screen
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.textfield import MDTextFieldRect
 from kivy.properties import StringProperty, ColorProperty, NumericProperty
 
 from calcl import LoanPay

@@ -1,4 +1,4 @@
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, NumericProperty
 from kivy.event import EventDispatcher
 
 class LoanPay(EventDispatcher):
@@ -32,14 +32,14 @@ class LoanPay(EventDispatcher):
 
     rank = StringProperty()
     '''числовая оценка качества кредита по шкале от 0 до 10'''
-    interest_discounted = StringProperty()
+    interest_discounted = NumericProperty()
     overpaid_discounted_pc = StringProperty()
     '''реальная переплата %'''
-    overpaid = StringProperty()
+    overpaid = NumericProperty()
     '''переплата номинальная'''
-    overpaid_discounted = StringProperty()
+    overpaid_discounted = NumericProperty()
     '''переплата реальная (с учетом инфляции)'''
-    annuity = StringProperty()
+    annuity = NumericProperty()
     '''аннуитетный платеж (с учетом ежемсячных комиссий)'''
     interest_effective = StringProperty()
     '''эффективная % ставка по кредиту (с учетом комиссий)'''

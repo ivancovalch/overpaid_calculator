@@ -1,5 +1,5 @@
 
-from locale import currency
+import locale
 from kivy.config import Config
 
 #Config.set('modules', 'screen', 'onex')
@@ -34,13 +34,14 @@ class OverPaidCalculatorApp(MDApp):
         super().__init__(**kwargs)
         self.locale = 'RU_ru'
         self.currency = 'RUB'
-        if platform in 'android':
-            from jnius import autoclass
-            Locale = autoclass('java.util.Locale')
-            Currency = autoclass('java.util.Currency')
-            jobj_locale = Locale.getDefault(Locale.Category.DISPLAY)
-            self.locale = jobj_locale.toLanguageTag()
-            self.currency = Currency.getDisplayName(jobj_locale)
+        locale.setlocale(locale.LC_ALL, '')
+        # if platform in 'android':
+        #     from jnius import autoclass
+        #     Locale = autoclass('java.util.Locale')
+        #     Currency = autoclass('java.util.Currency')
+        #     jobj_locale = Locale.getDefault(Locale.Category.DISPLAY)
+        #     self.locale = jobj_locale.toLanguageTag()
+        #     self.currency = Currency.getDisplayName(jobj_locale)
 
 
     def build(self):
